@@ -22,9 +22,8 @@ def main():
     )
     del model.model.layers
     del model.lm_head
-    torch.cuda.empty_cache()
 
-    image_files = glob.glob(images_path)[:2]
+    image_files = glob.glob(images_path)
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
