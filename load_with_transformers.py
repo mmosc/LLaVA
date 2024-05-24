@@ -32,6 +32,8 @@ def main():
         model.config
     ).to(model.device, dtype=torch.float16)
 
+    image_tensors = model.encode_images(image_tensors)
+
     feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
     np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu())
 
