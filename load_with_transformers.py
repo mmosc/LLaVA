@@ -10,10 +10,10 @@ import numpy as np
 def main():
     model_path = "liuhaotian/llava-v1.5-7b"
     images_path = "/share/hel/datasets/mmimdb/dataset/*.jpeg"
-    images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
+    # images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
     # TODO add general paths like in Hassaku
     encoded_data_path = "/share/hel/datasets/mmimdb/dataset/llava_encoded_images/"
-    encoded_data_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/llava_encoded_images/"
+    # encoded_data_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/llava_encoded_images/"
 
     tokenizer, model, image_processor, context_len = load_pretrained_model(
         model_path=model_path,
