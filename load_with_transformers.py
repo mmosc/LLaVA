@@ -35,7 +35,7 @@ def main():
     image_tensors = model.encode_images(image_tensors)
 
     feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
-    np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu())
+    np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu().detach().numpy())
 
 if __name__ == '__main__':
     main()
