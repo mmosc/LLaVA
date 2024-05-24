@@ -26,7 +26,7 @@ def main():
     del model.model.layers
     del model.lm_head
 
-    image_files = glob.glob(images_path)
+    image_files = glob.glob(images_path)[:3]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
@@ -41,7 +41,8 @@ def main():
         ).to(model.device, dtype=torch.float16)
 
         image_tensor = model.encode_images(image_tensor)
-        image_tensor = image_tensor.cpu().detach().numpy()
+        image_tensor = image_tensor.mean(dim=0).cpu().detach().numpy()
+        print(image_tensor.shape)
         image_tensors.append(image_tensor)
 
     # images = load_images(image_files)
@@ -57,7 +58,7 @@ def main():
     #
     # image_tensors = model.encode_images(image_tensors)
 
-    feature_file_path = os.path.join(encoded_data_path, 'llava_image_tokens.npz')
+    feature_file_path = os.path.join(encoded_data_path, 'llava_image_tokens_means.npz')
     np.savez(feature_file_path, indices=image_names, values=image_tensors)
 
 if __name__ == '__main__':
