@@ -10,10 +10,10 @@ import numpy as np
 def main():
     model_path = "liuhaotian/llava-v1.5-7b"
     images_path = "/share/hel/datasets/mmimdb/dataset/*.jpeg"
-    # images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
+    images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
     # TODO add general paths like in Hassaku
     encoded_data_path = "/share/hel/datasets/mmimdb/dataset/llava_encoded_images/"
-    # encoded_data_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/llava_encoded_images/"
+    encoded_data_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/llava_encoded_images/"
 
     tokenizer, model, image_processor, context_len = load_pretrained_model(
         model_path=model_path,
@@ -29,6 +29,9 @@ def main():
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
     images = load_images(image_files)
+    print(images)
+    feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
+    np.savez(feature_file_path, indices=image_names, values=images.cpu())
 
     image_tensors = process_images(
         images,
@@ -38,7 +41,7 @@ def main():
 
     image_tensors = model.encode_images(image_tensors)
 
-    feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
+    feature_file_path = os.path.join(encoded_data_path, 'llava_image_tokens.npz')
     np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu().detach().numpy())
 
 if __name__ == '__main__':
