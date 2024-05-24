@@ -4,6 +4,7 @@ from llava.mm_utils import process_images
 from llava.eval.run_llava import load_images
 import glob
 import torch
+import os
 
 def main():
     model_path = "liuhaotian/llava-v1.5-7b"
@@ -19,11 +20,11 @@ def main():
 
     print(model)
     image_files = glob.glob(images_path)[:3]
+    names = [os.path.basename(x).split('.')[0] for x in image_files]
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
     images = load_images(image_files)
-    image_sizes = [x.size for x in images]
     images_tensor = process_images(
         images,
         image_processor,
@@ -32,7 +33,7 @@ def main():
 
     print(images_tensor[0])
     print(images_tensor.shape)
-
+    print(names)
 
 if __name__ == '__main__':
     main()
