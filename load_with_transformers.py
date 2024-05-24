@@ -33,7 +33,7 @@ def main():
     ).to(model.device, dtype=torch.float16)
 
     feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
-    np.savez(feature_file_path, indices=image_names, values=image_tensors)
+    np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu())
 
 if __name__ == '__main__':
     main()
