@@ -41,6 +41,7 @@ def main():
         ).to(model.device, dtype=torch.float16)
 
         image_tensor = model.encode_images(image_tensor)
+        print(image_tensor.shape)
         image_tensor = image_tensor.mean(dim=0).cpu().detach().numpy()
         print(image_tensor.shape)
         image_tensors.append(image_tensor)
