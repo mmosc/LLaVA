@@ -2,6 +2,9 @@ from llava.model.builder import load_pretrained_model
 from llava.mm_utils import get_model_name_from_path
 from llava.mm_utils import process_images
 from llava.eval.run_llava import load_images
+
+from tqdm import tqdm
+
 import glob
 import torch
 import os
@@ -28,21 +31,34 @@ def main():
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
-    images = load_images(image_files)
-    print(images)
-    feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
-    np.savez(feature_file_path, indices=image_names, values=images.cpu())
+    image_tensors = []
+    for image_file in tqdm(image_files):
+        image = load_images([image_file])
+        image_tensor = process_images(
+            image,
+            image_processor,
+            model.config
+        ).to(model.device, dtype=torch.float16)
 
-    image_tensors = process_images(
-        images,
-        image_processor,
-        model.config
-    ).to(model.device, dtype=torch.float16)
+        image_tensor = model.encode_images(image_tensor)
+        image_tensor = image_tensor.cpu().detach().numpy()
+        image_tensors.append(image_tensor)
 
-    image_tensors = model.encode_images(image_tensors)
+    # images = load_images(image_files)
+    # print(images)
+    # feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
+    # np.savez(feature_file_path, indices=image_names, values=images.cpu())
+    #
+    # image_tensors = process_images(
+    #     images,
+    #     image_processor,
+    #     model.config
+    # ).to(model.device, dtype=torch.float16)
+    #
+    # image_tensors = model.encode_images(image_tensors)
 
     feature_file_path = os.path.join(encoded_data_path, 'llava_image_tokens.npz')
-    np.savez(feature_file_path, indices=image_names, values=image_tensors.cpu().detach().numpy())
+    np.savez(feature_file_path, indices=image_names, values=image_tensors)
 
 if __name__ == '__main__':
     main()
