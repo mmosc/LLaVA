@@ -10,7 +10,10 @@ import numpy as np
 def main():
     model_path = "liuhaotian/llava-v1.5-7b"
     images_path = "/share/hel/datasets/mmimdb/dataset/*.jpeg"
-    encoded_data_path =  "/share/hel/datasets/mmimdb/dataset/llava_encoded_images/"
+    # images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
+    # TODO add general paths like in Hassaku
+    encoded_data_path = "/share/hel/datasets/mmimdb/dataset/llava_encoded_images/"
+    # encoded_data_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/llava_encoded_images/"
 
     tokenizer, model, image_processor, context_len = load_pretrained_model(
         model_path=model_path,
@@ -19,13 +22,15 @@ def main():
     )
     del model.model.layers
     del model.lm_head
+    torch.cuda.empty_cache()
 
-    image_files = glob.glob(images_path)[:3]
+    image_files = glob.glob(images_path)[:2]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
     images = load_images(image_files)
+
     image_tensors = process_images(
         images,
         image_processor,
