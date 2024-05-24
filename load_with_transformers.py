@@ -5,7 +5,7 @@ from llava.eval.run_llava import load_images
 import glob
 import torch
 import os
-import np
+import numpy as np
 
 def main():
     model_path = "liuhaotian/llava-v1.5-7b"
