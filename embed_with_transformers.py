@@ -28,7 +28,6 @@ def main():
         model_name=get_model_name_from_path(model_path),
         # device='cpu'
     )
-
     image_files = glob.glob(images_path)[:3]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
 
@@ -47,6 +46,7 @@ def main():
         .cuda()
     )
 
+    print(model.config)
     for image_file in tqdm(image_files):
         image = load_images([image_file])
         image_tensor = process_images(
@@ -54,7 +54,6 @@ def main():
             image_processor,
             model.config
         ).to(model.device, dtype=torch.float16)
-        print(image_tensor)
 
         # Generate from both prompt and image
         with torch.inference_mode():
