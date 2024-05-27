@@ -125,7 +125,6 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             raise NotImplementedError("`inputs_embeds` is not supported")
 
         if images is not None:
-            print("images are not None.")
             (
                 inputs,
                 position_ids,
@@ -145,6 +144,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         else:
             inputs_embeds = self.get_model().embed_tokens(inputs)
 
+
+        print(position_ids, attention_mask, inputs_embeds)
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
