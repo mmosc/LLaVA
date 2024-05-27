@@ -14,7 +14,13 @@ import torch
 import os
 import numpy as np
 
+import argparse
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--prompt", type=str, required=True)
+    args = parser.parse_args()
+
     model_path = "liuhaotian/llava-v1.5-7b"
     images_path = "/share/hel/datasets/mmimdb/dataset/*.jpeg"
     # images_path = "/home/marta/jku/LLaVA/data/mmimdb/dataset/*.jpeg"
@@ -31,8 +37,7 @@ def main():
     image_files = glob.glob(images_path)[:3]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
 
-    prompt = ("You are given either the description of the poster of a movie or the description of the movie. "
-              "Given this information, identify the genre of the movie.")
+    prompt = args.prompt
     # print(image_files)
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
