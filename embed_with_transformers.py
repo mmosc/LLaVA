@@ -45,7 +45,6 @@ def main():
         .unsqueeze(0)
         .cuda()
     )
-    print(input_ids.shape, input_ids)
     for image_file in tqdm(image_files):
         image = load_images([image_file])
         image_size = image[0].size
