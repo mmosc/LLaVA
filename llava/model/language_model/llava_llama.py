@@ -115,9 +115,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         **kwargs,
     ) -> Union[GenerateOutput, torch.LongTensor]:
 
-        print(f'inputs shape: {inputs.shape}')
-
-        print(f'images shape: {images.shape}')
+        # print(f'inputs shape: {inputs.shape}')
+        # print(f'images shape: {images.shape}')
 
         position_ids = kwargs.pop("position_ids", None)
         attention_mask = kwargs.pop("attention_mask", None)
@@ -127,6 +126,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         if images is not None:
             # Here, images are **not** all the same
             # print(images)
+            print("How many times is this called?")
             (
                 inputs,
                 position_ids,
