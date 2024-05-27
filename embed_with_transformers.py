@@ -53,7 +53,7 @@ def main():
             image_processor,
             model.config
         ).to(model.device, dtype=torch.float16)
-        print(image_size, image_tensor.shape, image_tensor.mean())
+        # print(image_size, image_tensor.shape, image_tensor.mean())
         # Generate from both prompt and image
         with torch.inference_mode():
             output_ids = model.generate(

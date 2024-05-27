@@ -115,9 +115,9 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         **kwargs,
     ) -> Union[GenerateOutput, torch.LongTensor]:
 
-        print(inputs)
+        print(f'inputs shape: {inputs.shape}')
 
-        print(images)
+        print(f'images shape: {images}')
 
         position_ids = kwargs.pop("position_ids", None)
         attention_mask = kwargs.pop("attention_mask", None)
