@@ -163,13 +163,27 @@ def expand2square(pil_img, background_color):
         print(result)
         return result
 
+def crop2square(pil_img):
+    width, height = pil_img.size  # Get dimensions
+
+    new_width = new_height = min(width, height)
+
+    left = (width - new_width) / 2
+    top = (height - new_height) / 2
+    right = (width + new_width) / 2
+    bottom = (height + new_height) / 2
+
+    # Crop the center of the image
+    pil_img = pil_img.crop((left, top, right, bottom))
+    return pil_img
 
 def process_images(images, image_processor, model_cfg):
     image_aspect_ratio = getattr(model_cfg, "image_aspect_ratio", None)
     new_images = []
     if image_aspect_ratio == 'pad':
         for image in images:
-            image = expand2square(image, tuple(int(x*255) for x in image_processor.image_mean))
+            # image = expand2square(image, tuple(int(x*255) for x in image_processor.image_mean))
+            image = crop2square(image)
             image = image_processor.preprocess(image, return_tensors='pt')['pixel_values'][0]
             new_images.append(image)
     elif image_aspect_ratio == "anyres":
