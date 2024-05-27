@@ -51,7 +51,7 @@ def main():
         image_tensor = model.encode_images(image_tensor)
         image_tensor = image_tensor.cpu().detach().numpy()
         # image_tensors.append(image_tensor)
-        image_sizes.append(image.size)
+        image_sizes.append(image[0].size)
 
         # Tokenize the prompt
         input_ids = (
