@@ -34,6 +34,7 @@ def main():
 
     prompt = ("You are given either the description of the poster of a movie or the description of the movie. "
               "Given this information, identify the genre of the movie.")
+    print(image_names)
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
