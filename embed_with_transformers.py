@@ -49,12 +49,12 @@ def main():
 
     for image_file in tqdm(image_files):
         image = load_images([image_file])
-        print(image)
         image_tensor = process_images(
             image,
             image_processor,
             model.config
         ).to(model.device, dtype=torch.float16)
+        print(image_tensor)
 
         # Generate from both prompt and image
         with torch.inference_mode():
