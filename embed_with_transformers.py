@@ -64,6 +64,8 @@ def main():
         # Generate from both prompt and image
         with torch.inference_mode():
 
+
+            print(image_tensor)
             output_ids = model.generate(
                 input_ids,
                 images=image_tensor,
@@ -75,8 +77,6 @@ def main():
                 # max_new_tokens=args.max_new_tokens,
                 use_cache=True,
             )
-
-            print(output_ids)
 
             outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
             print(outputs)
