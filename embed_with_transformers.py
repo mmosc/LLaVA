@@ -47,7 +47,7 @@ def main():
     )
     for image_file in tqdm(image_files):
         image = load_images([image_file])
-        image_size = image.size
+        image_size = image[0].size
         image_tensor = process_images(
             image,
             image_processor,
