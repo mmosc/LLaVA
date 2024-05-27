@@ -125,7 +125,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             raise NotImplementedError("`inputs_embeds` is not supported")
 
         if images is not None:
-            print(images)
+            # Here, images are **not** all the same
+            # print(images)
             (
                 inputs,
                 position_ids,
