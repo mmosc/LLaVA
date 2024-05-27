@@ -48,10 +48,10 @@ def main():
         ).to(model.device, dtype=torch.float16)
 
         # Convert images to tokens
-        image_tensor = model.encode_images(image_tensor)
+        # image_tensor = model.encode_images(image_tensor)
         # image_tensor = image_tensor.cpu().detach().numpy()
         # image_tensors.append(image_tensor)
-        image_sizes.append(image[0].size)
+        # image_sizes.append(image[0].size)
 
         # Tokenize the prompt
         input_ids = (
@@ -66,7 +66,7 @@ def main():
             output_ids = model.generate(
                 input_ids,
                 images=image_tensor,
-                image_sizes=image_sizes,
+                # image_sizes=image_sizes,
                 # do_sample=False, # True if args.temperature > 0 else False,
                 # temperature=0, # args.temperature,
                 # top_p=args.top_p,
