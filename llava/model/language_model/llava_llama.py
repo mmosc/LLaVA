@@ -144,7 +144,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 image_sizes=image_sizes
             )
         else:
-            print("Does this ever happen?")
+            # print("Does this ever happen?") --> no
             inputs_embeds = self.get_model().embed_tokens(inputs)
 
 
