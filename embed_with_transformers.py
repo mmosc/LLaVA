@@ -45,8 +45,6 @@ def main():
         .unsqueeze(0)
         .cuda()
     )
-    setattr(model.config, 'image_aspect_ratio', 'anyres')
-    print(model.config)
     for image_file in tqdm(image_files):
         image = load_images([image_file])
         image_tensor = process_images(
