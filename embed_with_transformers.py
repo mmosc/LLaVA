@@ -37,8 +37,8 @@ def main():
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
-    image_tensors = []
-    image_sizes = []
+    # image_tensors = []
+    # image_sizes = []
     # Tokenize the prompt
     input_ids = (
         tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
@@ -47,6 +47,7 @@ def main():
     )
     for image_file in tqdm(image_files):
         image = load_images([image_file])
+        image_size = image.size
         image_tensor = process_images(
             image,
             image_processor,
