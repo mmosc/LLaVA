@@ -56,37 +56,21 @@ def main():
         ).to(model.device, dtype=torch.float16)
 
         # Generate from both prompt and image
-        with torch.inference_mode():
-            output_ids = model.generate(
-                input_ids,
-                images=image_tensor,
-                image_sizes=image_sizes,
-                # do_sample=False, # True if args.temperature > 0 else False,
-                # temperature=0, # args.temperature,
-                # top_p=args.top_p,
-                # num_beams=args.num_beams,
-                # max_new_tokens=args.max_new_tokens,
-                use_cache=True,
-            )
-
-            outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
-            print(outputs)
-
-    # images = load_images(image_files)
-    # print(images)
-    # feature_file_path = os.path.join(encoded_data_path, 'llava_images.npz')
-    # np.savez(feature_file_path, indices=image_names, values=images.cpu())
-    #
-    # image_tensors = process_images(
-    #     images,
-    #     image_processor,
-    #     model.config
-    # ).to(model.device, dtype=torch.float16)
-    #
-    # image_tensors = model.encode_images(image_tensors)
-
-    # feature_file_path = os.path.join(encoded_data_path, 'llava_image_tokens.npz')
-    # np.savez(feature_file_path, indices=image_names, values=image_tensors)
+        # with torch.inference_mode():
+        #     output_ids = model.generate(
+        #         input_ids,
+        #         images=image_tensor,
+        #         image_sizes=image_sizes,
+        #         # do_sample=False, # True if args.temperature > 0 else False,
+        #         # temperature=0, # args.temperature,
+        #         # top_p=args.top_p,
+        #         # num_beams=args.num_beams,
+        #         # max_new_tokens=args.max_new_tokens,
+        #         use_cache=True,
+        #     )
+        #
+        #     outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
+        #     print(outputs)
 
 if __name__ == '__main__':
     main()
