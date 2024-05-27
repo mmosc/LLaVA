@@ -36,9 +36,9 @@ class LlavaLlamaModel(LlavaMetaModel, LlamaModel):
     config_class = LlavaConfig
 
     def __init__(self, config: LlamaConfig):
-        # super(LlavaLlamaModel, self).__init__(config)
+        super(LlavaLlamaModel, self).__init__(config)
         # alternative: super(LlavaMetaModel, self).__init__(config)
-        LlavaMetaModel.__init__(self, config)
+        # LlavaMetaModel.__init__(self, config)
 
 class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
     config_class = LlavaConfig
@@ -76,7 +76,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
     ) -> Union[Tuple, CausalLMOutputWithPast]:
 
         if inputs_embeds is None:
-            print("Does prepare_inputs_labels_for_multimodal happen in forward?")
+            # print("How many times is forward called?") --> two times per image
             (
                 input_ids,
                 position_ids,
@@ -127,8 +127,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         if images is not None:
             # Here, images are **not** all the same
             # print(images)
-            # print("How many times is this called?") --> Only once per image
-            print("Does prepare_inputs_labels_for_multimodal happen in generate?")
+            # print("How many times is generate called?") --> only once
+            # but generate calls forward twice
             (
                 inputs,
                 position_ids,
