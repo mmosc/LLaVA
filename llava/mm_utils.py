@@ -160,7 +160,7 @@ def expand2square(pil_img, background_color):
     else:
         result = Image.new(pil_img.mode, (height, height), background_color)
         result.paste(pil_img, ((height - width) // 2, 0))
-        print(width, height)
+        print(result)
         return result
 
 
