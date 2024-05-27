@@ -125,6 +125,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             raise NotImplementedError("`inputs_embeds` is not supported")
 
         if images is not None:
+            print(images)
             (
                 inputs,
                 position_ids,
@@ -145,7 +146,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             inputs_embeds = self.get_model().embed_tokens(inputs)
 
 
-        print(position_ids, attention_mask, inputs_embeds)
+        # Here, the tensors are all the same
+        # print(position_ids, attention_mask, inputs_embeds)
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
