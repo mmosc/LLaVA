@@ -67,7 +67,7 @@ def main():
             output_ids = model.generate(
                 input_ids,
                 images=image_tensor,
-                # image_sizes=image_sizes,
+                image_sizes=image_sizes,
                 # do_sample=False, # True if args.temperature > 0 else False,
                 # temperature=0, # args.temperature,
                 # top_p=args.top_p,
