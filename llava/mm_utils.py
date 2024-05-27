@@ -151,7 +151,6 @@ def load_image_from_base64(image):
 
 def expand2square(pil_img, background_color):
     width, height = pil_img.size
-    print(width, height)
     if width == height:
         return pil_img
     elif width > height:
@@ -161,6 +160,7 @@ def expand2square(pil_img, background_color):
     else:
         result = Image.new(pil_img.mode, (height, height), background_color)
         result.paste(pil_img, ((height - width) // 2, 0))
+        print(width, height)
         return result
 
 
