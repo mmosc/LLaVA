@@ -126,7 +126,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         if images is not None:
             # Here, images are **not** all the same
             # print(images)
-            print("How many times is this called?")
+            # print("How many times is this called?") --> Only once per image
             (
                 inputs,
                 position_ids,
@@ -144,6 +144,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 image_sizes=image_sizes
             )
         else:
+            print("Does this ever happen?")
             inputs_embeds = self.get_model().embed_tokens(inputs)
 
 
