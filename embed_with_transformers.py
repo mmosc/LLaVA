@@ -34,7 +34,7 @@ def main():
         model_name=get_model_name_from_path(model_path),
         # device='cpu'
     )
-    image_files = glob.glob(images_path)[:3]
+    image_files = glob.glob(images_path)[:1]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
 
     prompt = args.prompt
@@ -70,7 +70,7 @@ def main():
                 # top_p=args.top_p,
                 # num_beams=args.num_beams,
                 # max_new_tokens=args.max_new_tokens,
-                use_cache=False,
+                use_cache=True,
             )
             # print(output_ids)
             outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
