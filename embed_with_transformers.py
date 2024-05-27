@@ -45,6 +45,7 @@ def main():
         .unsqueeze(0)
         .cuda()
     )
+    print(input_ids.shape, input_ids)
     for image_file in tqdm(image_files):
         image = load_images([image_file])
         image_size = image[0].size
@@ -57,7 +58,7 @@ def main():
         # Generate from both prompt and image
         with torch.inference_mode():
             output_ids = model.generate(
-                input_ids,
+                inputs=input_ids,
                 images=image_tensor,
                 image_sizes=image_size,
                 # do_sample=False, # True if args.temperature > 0 else False,
