@@ -76,6 +76,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
     ) -> Union[Tuple, CausalLMOutputWithPast]:
 
         if inputs_embeds is None:
+            print("Does prepare_inputs_labels_for_multimodal happen in forward?")
             (
                 input_ids,
                 position_ids,
@@ -127,6 +128,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             # Here, images are **not** all the same
             # print(images)
             # print("How many times is this called?") --> Only once per image
+            print("Does prepare_inputs_labels_for_multimodal happen in generate?")
             (
                 inputs,
                 position_ids,
