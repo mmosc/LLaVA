@@ -29,12 +29,12 @@ def main():
         # device='cpu'
     )
 
-    image_files = glob.glob(images_path)[:1]
+    image_files = glob.glob(images_path)[:3]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
 
     prompt = ("You are given either the description of the poster of a movie or the description of the movie. "
               "Given this information, identify the genre of the movie.")
-    print(image_names)
+    print(image_files)
     # print(f'Encoding {one_image_path}...')
     # Not sure if I should follow run_llava line 100 on
     # or model_vqa to encode the image
