@@ -13,7 +13,7 @@
 #    limitations under the License.
 
 
-# from typing import List, Optional, Tuple, Union
+from typing import List, Optional, Tuple, Union
 from typing import Optional, Union
 
 import torch
@@ -22,7 +22,7 @@ import torch.nn as nn
 from transformers import AutoConfig, AutoModelForCausalLM, \
                          LlamaConfig, LlamaModel, LlamaForCausalLM
 
-# from transformers.modeling_outputs import CausalLMOutputWithPast
+from transformers.modeling_outputs import CausalLMOutputWithPast
 from transformers.generation.utils import GenerateOutput
 
 from ..llava_arch import LlavaMetaModel, LlavaMetaForCausalLM
