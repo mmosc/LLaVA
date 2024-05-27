@@ -117,7 +117,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
 
         print(f'inputs shape: {inputs.shape}')
 
-        print(f'images shape: {images}')
+        print(f'images shape: {images.shape}')
 
         position_ids = kwargs.pop("position_ids", None)
         attention_mask = kwargs.pop("attention_mask", None)
