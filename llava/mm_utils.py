@@ -151,6 +151,7 @@ def load_image_from_base64(image):
 
 def expand2square(pil_img, background_color):
     width, height = pil_img.size
+    print(width, height)
     if width == height:
         return pil_img
     elif width > height:
@@ -165,7 +166,6 @@ def expand2square(pil_img, background_color):
 
 def process_images(images, image_processor, model_cfg):
     image_aspect_ratio = getattr(model_cfg, "image_aspect_ratio", None)
-    print(images)
     new_images = []
     if image_aspect_ratio == 'pad':
         for image in images:
