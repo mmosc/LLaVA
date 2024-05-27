@@ -40,32 +40,24 @@ def main():
     # or model_vqa to encode the image
     image_tensors = []
     image_sizes = []
+    # Tokenize the prompt
+    input_ids = (
+        tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
+        .unsqueeze(0)
+        .cuda()
+    )
+
     for image_file in tqdm(image_files):
         image = load_images([image_file])
+        print(image)
         image_tensor = process_images(
             image,
             image_processor,
             model.config
         ).to(model.device, dtype=torch.float16)
 
-        # Convert images to tokens
-        # image_tensor = model.encode_images(image_tensor)
-        # image_tensor = image_tensor.cpu().detach().numpy()
-        # image_tensors.append(image_tensor)
-        # image_sizes.append(image[0].size)
-
-        # Tokenize the prompt
-        input_ids = (
-            tokenizer_image_token(prompt, tokenizer, IMAGE_TOKEN_INDEX, return_tensors="pt")
-            .unsqueeze(0)
-            .cuda()
-        )
-
         # Generate from both prompt and image
         with torch.inference_mode():
-
-
-            print(image_tensor)
             output_ids = model.generate(
                 input_ids,
                 images=image_tensor,
