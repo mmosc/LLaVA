@@ -70,9 +70,9 @@ def main():
                 # top_p=args.top_p,
                 # num_beams=args.num_beams,
                 # max_new_tokens=args.max_new_tokens,
-                use_cache=True,
+                use_cache=False,
             )
-
+            print(output_ids)
             outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
             print(outputs)
 
