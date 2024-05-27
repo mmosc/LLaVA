@@ -76,8 +76,8 @@ def main():
                 use_cache=True,
             )
 
-    outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
-    print(outputs)
+            outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
+            print(outputs)
 
     # images = load_images(image_files)
     # print(images)
