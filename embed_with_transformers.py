@@ -76,6 +76,8 @@ def main():
                 use_cache=True,
             )
 
+            print(output_ids)
+
             outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
             print(outputs)
 
