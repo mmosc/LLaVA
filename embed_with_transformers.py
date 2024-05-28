@@ -34,7 +34,7 @@ def main():
         model_name=get_model_name_from_path(model_path),
         # device='cpu'
     )
-    image_files = glob.glob(images_path)[:1]
+    image_files = glob.glob(images_path)[:2]
     image_names = [os.path.basename(x).split('.')[0] for x in image_files]
 
     prompt = args.prompt

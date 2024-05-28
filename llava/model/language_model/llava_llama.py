@@ -145,7 +145,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes=image_sizes
             )
-            print(inputs, inputs_embeds)
+            # print(inputs) --> None
         else:
             # print("Does this ever happen?") --> no
             inputs_embeds = self.get_model().embed_tokens(inputs)
@@ -153,6 +153,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
 
         # Here, the tensors are all the same
         # print(position_ids, attention_mask, inputs_embeds)
+        print(inputs_embeds.shape, inputs_embeds.mean())
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
