@@ -153,7 +153,10 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
 
         # Here, the tensors are all the same
         # print(position_ids, attention_mask, inputs_embeds)
-        print(inputs_embeds.shape, inputs_embeds.mean())
+        (position_ids, attention_mask, inputs_embeds) = (
+            torch.randn(position_ids.shape),
+            torch.randn(attention_mask.shape),
+            torch.randn(inputs_embeds.shape))
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
