@@ -145,7 +145,8 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes=image_sizes
             )
-            # print(inputs) --> None
+            # print(inputs) --> None, which is fine since prepare_inputs_labels_for_multimodal should return inputs None
+
         else:
             # print("Does this ever happen?") --> no
             inputs_embeds = self.get_model().embed_tokens(inputs)
@@ -154,7 +155,6 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         # Here, the tensors are all the same
         # print(position_ids, attention_mask, inputs_embeds)
         # position_ids and attention mask are None...
-        inputs_embeds = torch.randn(inputs_embeds.shape).to(self.device, dtype=torch.float)
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
