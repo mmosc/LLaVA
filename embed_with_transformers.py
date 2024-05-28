@@ -75,7 +75,7 @@ def main():
             )
             # print(output_ids)
             outputs = tokenizer.batch_decode(output_ids, skip_special_tokens=True)[0].strip()
-            # print(outputs)
+            print(outputs)
 
 if __name__ == '__main__':
     main()
