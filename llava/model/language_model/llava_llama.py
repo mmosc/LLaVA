@@ -114,6 +114,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         images: Optional[torch.Tensor] = None,
         image_sizes: Optional[torch.Tensor] = None,
         tokenizer = None,
+        output_hidden_states: Optional[bool] = True,
         **kwargs,
     ) -> Union[GenerateOutput, torch.LongTensor]:
 
@@ -147,6 +148,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             position_ids=position_ids,
             attention_mask=attention_mask,
             inputs_embeds=inputs_embeds,
+            output_hidden_states=output_hidden_states,
             **kwargs
         )
 
