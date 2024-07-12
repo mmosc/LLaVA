@@ -51,7 +51,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         self.pretraining_tp = config.pretraining_tp
         self.vocab_size = config.vocab_size
         self.lm_head = nn.Linear(config.hidden_size, config.vocab_size, bias=False)
-        # self.mm_head = nn.Linear(config.vocab_size, config.output_size, bias=False)
+        # self.mm_head = nn.Linear(config.hidden_size, config.output_size, bias=False)
 
         # Initialize weights and apply final processing
         self.post_init()
@@ -77,6 +77,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
 
         if inputs_embeds is None:
             # print("How many times is forward called?") --> two times per image
+            # print(f"Image sizes in forward: {image_sizes}") --> None
             (
                 input_ids,
                 position_ids,
@@ -106,18 +107,15 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             output_hidden_states=output_hidden_states,
             return_dict=return_dict
         )
-
     @torch.no_grad()
-    def generate(
+    def get_last_layer(
         self,
         inputs: Optional[torch.Tensor] = None,
         images: Optional[torch.Tensor] = None,
         image_sizes: Optional[torch.Tensor] = None,
+        tokenizer = None,
         **kwargs,
     ) -> Union[GenerateOutput, torch.LongTensor]:
-
-        # print(f'inputs shape: {inputs.shape}')
-        # print(f'images shape: {images.shape}')
 
         position_ids = kwargs.pop("position_ids", None)
         attention_mask = kwargs.pop("attention_mask", None)
@@ -125,10 +123,6 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
             raise NotImplementedError("`inputs_embeds` is not supported")
 
         if images is not None:
-            # Here, images are **not** all the same
-            # print(images)
-            # print("How many times is generate called?") --> only once
-            # but generate calls forward twice
             (
                 inputs,
                 position_ids,
@@ -145,7 +139,77 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 images,
                 image_sizes=image_sizes
             )
-            # print(inputs) --> None
+
+        else:
+            inputs_embeds = self.get_model().embed_tokens(inputs)
+
+        return super().forward(
+            position_ids=position_ids,
+            attention_mask=attention_mask,
+            inputs_embeds=inputs_embeds,
+            **kwargs
+        )
+
+
+
+
+    @torch.no_grad()
+    def generate(
+        self,
+        inputs: Optional[torch.Tensor] = None,
+        images: Optional[torch.Tensor] = None,
+        image_sizes: Optional[torch.Tensor] = None,
+        tokenizer = None,
+        **kwargs,
+    ) -> Union[GenerateOutput, torch.LongTensor]:
+
+        # print(f'inputs shape: {inputs.shape}')
+        # print(f'images shape: {images.shape}')
+
+        position_ids = kwargs.pop("position_ids", None)
+        attention_mask = kwargs.pop("attention_mask", None)
+        if "inputs_embeds" in kwargs:
+            raise NotImplementedError("`inputs_embeds` is not supported")
+
+        if images is not None:
+            # Here, images are **not** all the same
+            # print(images)
+            # print("How many times is generate called?") --> only once
+            # but generate calls forward twice
+            # The things below are not all the same
+            # print(
+            #     inputs,
+            #     position_ids,
+            #     attention_mask,
+            #     images,
+            #     image_sizes
+            # )
+            # print(f"Image sizes in generate: {image_sizes}")
+            (
+                inputs,
+                position_ids,
+                attention_mask,
+                _,
+                inputs_embeds,
+                _
+            ) = self.prepare_inputs_labels_for_multimodal(
+                inputs,
+                position_ids,
+                attention_mask,
+                None,
+                None,
+                images,
+                image_sizes=image_sizes
+            )
+            # Here the below tensors are all the same...
+            # so where are the images embedded?
+            # print(
+            #     position_ids,
+            #     attention_mask,
+            #     inputs_embeds.shape, # --> My guess is that these are the embeddings of the prompt, so it's fine that they are the same
+            # )
+            # print(inputs) --> None, which is fine since prepare_inputs_labels_for_multimodal should return inputs None
+
         else:
             # print("Does this ever happen?") --> no
             inputs_embeds = self.get_model().embed_tokens(inputs)
@@ -154,13 +218,23 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         # Here, the tensors are all the same
         # print(position_ids, attention_mask, inputs_embeds)
         # position_ids and attention mask are None...
-        inputs_embeds = torch.randn(inputs_embeds.shape).to(self.device, dtype=torch.float)
         return super().generate(
             position_ids=position_ids,
             attention_mask=attention_mask,
             inputs_embeds=inputs_embeds,
             **kwargs
         )
+
+
+        # if tokenizer == None:
+        #     return super().generate(
+        #         position_ids=position_ids,
+        #         attention_mask=attention_mask,
+        #         inputs_embeds=inputs_embeds,
+        #         **kwargs
+        #     )
+        # else:
+        #     return position_ids
 
     def prepare_inputs_for_generation(self, input_ids, past_key_values=None,
                                       inputs_embeds=None, **kwargs):

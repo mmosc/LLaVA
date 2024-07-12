@@ -20,6 +20,8 @@ def select_best_resolution(original_size, possible_resolutions):
     Returns:
         tuple: The best fit resolution in the format (width, height).
     """
+    # print(original_size)
+    # print(type(original_size))
     original_width, original_height = original_size
     best_fit = None
     max_effective_resolution = 0
@@ -112,6 +114,8 @@ def get_anyres_image_grid_shape(image_size, grid_pinpoints, patch_size):
         possible_resolutions = grid_pinpoints
     else:
         possible_resolutions = ast.literal_eval(grid_pinpoints)
+    # this is the problematic one
+    # print(f"get_anyres_image_grid_shape: {image_size}")
     width, height = select_best_resolution(image_size, possible_resolutions)
     return width // patch_size, height // patch_size
 
@@ -132,6 +136,8 @@ def process_anyres_image(image, processor, grid_pinpoints):
         possible_resolutions = grid_pinpoints
     else:
         possible_resolutions = ast.literal_eval(grid_pinpoints)
+
+    # print(f"process_anyres_image: {image.size}")
     best_resolution = select_best_resolution(image.size, possible_resolutions)
     image_padded = resize_and_pad_image(image, best_resolution)
 
@@ -242,7 +248,7 @@ class KeywordsStoppingCriteria(StoppingCriteria):
             self.keyword_ids.append(torch.tensor(cur_keyword_ids))
         self.tokenizer = tokenizer
         self.start_len = input_ids.shape[1]
-    
+
     def call_for_batch(self, output_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
         offset = min(output_ids.shape[1] - self.start_len, self.max_keyword_len)
         self.keyword_ids = [keyword_id.to(output_ids.device) for keyword_id in self.keyword_ids]
@@ -255,7 +261,7 @@ class KeywordsStoppingCriteria(StoppingCriteria):
             if keyword in outputs:
                 return True
         return False
-    
+
     def __call__(self, output_ids: torch.LongTensor, scores: torch.FloatTensor, **kwargs) -> bool:
         outputs = []
         for i in range(output_ids.shape[0]):
