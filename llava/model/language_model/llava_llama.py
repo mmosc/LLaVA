@@ -113,6 +113,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         inputs: Optional[torch.Tensor] = None,
         images: Optional[torch.Tensor] = None,
         image_sizes: Optional[torch.Tensor] = None,
+        descriptions: Optional[torch.Tensor] = None,
         tokenizer = None,
         output_hidden_states: Optional[bool] = True,
         **kwargs,
@@ -141,6 +142,23 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 image_sizes=image_sizes
             )
 
+        elif descriptions is not None:
+            (
+                inputs,
+                position_ids,
+                attention_mask,
+                _,
+                inputs_embeds,
+                _
+            ) = self.prepare_inputs_labels_from_descriptions(
+                inputs,
+                position_ids,
+                attention_mask,
+                None,
+                None,
+                descriptions,
+                tokenizer
+            )
         else:
             inputs_embeds = self.get_model().embed_tokens(inputs)
 
