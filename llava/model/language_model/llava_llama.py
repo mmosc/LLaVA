@@ -114,7 +114,7 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
         images: Optional[torch.Tensor] = None,
         image_sizes: Optional[torch.Tensor] = None,
         descriptions: Optional[torch.Tensor] = None,
-        tokenizer = None,
+        tokenizer=None,
         output_hidden_states: Optional[bool] = True,
         **kwargs,
     ) -> Union[GenerateOutput, torch.LongTensor]:
@@ -151,13 +151,14 @@ class LlavaLlamaForCausalLM(LlamaForCausalLM, LlavaMetaForCausalLM):
                 inputs_embeds,
                 _
             ) = self.prepare_inputs_labels_from_descriptions(
-                inputs,
-                position_ids,
-                attention_mask,
-                None,
-                None,
-                descriptions,
-                tokenizer
+                #  self, input_ids, position_ids, attention_mask, past_key_values, labels, descriptions, tokenizer
+                input_ids=inputs,
+                position_ids=position_ids,
+                attention_mask=attention_mask,
+                past_key_values=None,
+                labels=None,
+                descriptions=descriptions,
+                tokenizer=tokenizer
             )
         else:
             inputs_embeds = self.get_model().embed_tokens(inputs)

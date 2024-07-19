@@ -146,8 +146,14 @@ class LlavaMetaForCausalLM(ABC):
         self, input_ids, position_ids, attention_mask, past_key_values, labels,
         descriptions, tokenizer
     ):
+        # print(descriptions)
         description_ids = tokenizer(descriptions)
-        image_features = self.get_model().embed_tokens(description_ids)
+        # print(description_ids)
+        description_ids = description_ids.input_ids
+        description_ids = torch.tensor(description_ids, dtype=torch.long)
+        image_features = [self.get_model().embed_tokens(description_ids)]
+        #here it is fine print(image_features.shape)
+        # image_features = torch.tensor(image_features, dtype=torch.long)
         # TODO: image start / end is not implemented here to support pretraining.
         if getattr(self.config, 'tune_mm_mlp_adapter', False) and getattr(self.config, 'mm_use_im_start_end', False):
             raise NotImplementedError
@@ -184,6 +190,7 @@ class LlavaMetaForCausalLM(ABC):
                 # cur_input_embeds = torch.cat([cur_input_embeds_1, cur_image_features[0:0]], dim=0)
                 # New: uncomment the next line to also boost the prompt
                 # cur_input_embeds_1 = cur_input_embeds_1.repeat(10, 1)
+                # the problem is here.
                 # print(cur_input_embeds_1.shape, cur_image_features.shape)
                 cur_input_embeds = torch.cat([cur_input_embeds_1, cur_image_features], dim=0)
 
@@ -300,6 +307,7 @@ class LlavaMetaForCausalLM(ABC):
                 images = [x.unsqueeze(0) if x.ndim == 3 else x for x in images]
             concat_images = torch.cat([image for image in images], dim=0)
             image_features = self.encode_images(concat_images)
+            print(f'image_features shapes: {image_features.shape}')
             split_sizes = [image.shape[0] for image in images]
             image_features = torch.split(image_features, split_sizes, dim=0)
             mm_patch_merge_type = getattr(self.config, 'mm_patch_merge_type', 'flat')
@@ -340,8 +348,12 @@ class LlavaMetaForCausalLM(ABC):
                                 image_feature,
                                 self.model.image_newline[None].to(image_feature.device)
                             ), dim=0)
+
+                    print(f'image_feature.shape {image_feature.shape}')
                     new_image_features.append(image_feature)
                 image_features = new_image_features
+
+                print(f'image_features {image_features}')
             else:
                 raise ValueError(f"Unexpected mm_patch_merge_type: {self.config.mm_patch_merge_type}")
         else:
