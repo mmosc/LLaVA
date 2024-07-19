@@ -307,7 +307,7 @@ class LlavaMetaForCausalLM(ABC):
                 images = [x.unsqueeze(0) if x.ndim == 3 else x for x in images]
             concat_images = torch.cat([image for image in images], dim=0)
             image_features = self.encode_images(concat_images)
-            print(f'image_features shapes: {image_features.shape}')
+            # print(f'image_features shapes: {image_features.shape}')
             split_sizes = [image.shape[0] for image in images]
             image_features = torch.split(image_features, split_sizes, dim=0)
             mm_patch_merge_type = getattr(self.config, 'mm_patch_merge_type', 'flat')
@@ -349,11 +349,11 @@ class LlavaMetaForCausalLM(ABC):
                                 self.model.image_newline[None].to(image_feature.device)
                             ), dim=0)
 
-                    print(f'image_feature.shape {image_feature.shape}')
+                    # print(f'image_feature.shape {image_feature.shape}')
                     new_image_features.append(image_feature)
                 image_features = new_image_features
 
-                print(f'image_features {image_features}')
+                # print(f'image_features {image_features}')
             else:
                 raise ValueError(f"Unexpected mm_patch_merge_type: {self.config.mm_patch_merge_type}")
         else:
